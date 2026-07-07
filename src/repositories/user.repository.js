@@ -21,7 +21,7 @@ class UserRepository {
 
     return await User.findOne({
       email
-    });
+    }).select("+password");
 
   }
 
@@ -45,6 +45,19 @@ class UserRepository {
 
     );
 
+  }
+  async verifyUser(userId) {
+    return await User.findByIdAndUpdate(userId, { isVerified: true },
+      { new: true }
+    );
+  }
+
+  async updateById(userId, updateData) {
+    console.log("Updating user: ", userId, updateData);
+    return await User.findByIdAndUpdate(userId, updateData, { new: true });
+  }
+  async save(user) {
+    return await user.save();
   }
 
 }

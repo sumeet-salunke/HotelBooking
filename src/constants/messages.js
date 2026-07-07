@@ -37,6 +37,21 @@ export const AUTH_MESSAGES = Object.freeze({
     "Your account has been temporarily locked.",
 
   USER_NOT_FOUND:
-    "User not found."
+    "User not found.",
+
+  ACCOUNT_DISABLED: "Your account has been disabled.",
+
+  REFRESH_TOKEN_REQUIRED: "Refresh token is required.",
+  INVALID_REFRESH_TOKEN: "Invalid or expired refresh token.",
+  SESSION_EXPIRED: "Session expired. Please login again.",
+  TOKEN_REFRESH_SUCCESS: "Access token refreshed successfully",
+  LOGOUT_SUCCESS: "Logged out successfully",
+  PASSWORD_RESET_OTP_SENT: "If an account exists with this email, a password reset OTP has been sent.",
+
+  PASSWORD_RESET_SUCCESS: "Password reset successfully",
+
+  INVALID_OR_EXPIRED_OTP: "Invalid or expired OTP.",
+  UNAUTHORIZED: "Authentication required.",
+  INVALID_ACCCESS_TOKEN: "Invalid or expired access token.",
 
 });

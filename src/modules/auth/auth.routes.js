@@ -2,20 +2,31 @@ import { Router } from "express";
 
 import validate from "../../middlewares/validate.middleware.js";
 
-import { registerSchema } from "./auth.validation.js";
+import { registerSchema, verifyOTPSchema, loginSchema, forgotPassswordSchema, resetPasswordSchema } from "./auth.validation.js";
 
-import { register } from "./auth.controller.js";
+import { register, verifyOTP, login, refreshAccessToken, logout, forgotPassword, resetPassword } from "./auth.controller.js";
+
+import { authenticate } from "../../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.post(
+router.post("/register", validate(registerSchema), register);
 
-  "/register",
+router.post("/verify-otp", validate(verifyOTPSchema), verifyOTP);
 
-  validate(registerSchema),
+router.post("/login", validate(loginSchema), login);
 
-  register
+router.post("/refresh-token", refreshAccessToken);
+router.post("/logout", logout);
+router.post("/forgot-password", validate(forgotPassswordSchema), forgotPassword);
+router.post("/reset-password", validate(resetPasswordSchema), resetPassword);
 
-);
+router.get("/me", authenticate, (req, res) => {
+  res.status(200).json({
+    success: true, data: {
+      user: req.user
+    }
+  });
+})
 
 export default router;

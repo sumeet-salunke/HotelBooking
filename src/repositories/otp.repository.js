@@ -62,6 +62,10 @@ class OTPRepository {
 
   }
 
+  async updateById(id, updateData) {
+    return await OTP.findByIdAndUpdate(id, updateData, { new: true });
+  }
+
 }
 
 export default new OTPRepository();

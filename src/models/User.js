@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      defualt: null
+      default: null
     },
     profileImage: {
       type: String,
@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema(
       enum: Object.values(ROLES),
       default: ROLES.CUSTOMER,
     },
-    isverified: {
+    isVerified: {
       type: Boolean,
       default: false,
     },
@@ -54,6 +54,8 @@ const userSchema = new mongoose.Schema(
     },
     isActive: {
       type: Boolean, default: true
+    }, tokenVersion: {
+      type: Number, default: 0
     }
   }, {
   timestamps: true,
@@ -62,38 +64,38 @@ const userSchema = new mongoose.Schema(
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
-    return next();
+    return;
   }
   this.password = await bcrypt.hash(this.password, Number(process.env.BCRYPT_SALT_ROUNDS));
   // next();
 });
 
-userSchema.method.comparepPassword = async function (password) {
-  return await bcrypt.compare(password, this.password);
-};
+// userSchema.methods.comparePassword = async function (password) {
+//   return await bcrypt.compare(password, this.password);
+// };
 
-userSchema.method.generateAccessToken = function () {
-  return jwt.sign({
-    userId: this._id,
-    role: this.role,
-  }, process.env.JWT_ACCESS_SECRET, {
-    expiresIn: process.env.ACCESS_TOKEN_EXPIRY
-  })
-};
+// userSchema.methods.generateAccessToken = function () {
+//   return jwt.sign({
+//     userId: this._id,
+//     role: this.role,
+//   }, process.env.JWT_ACCESS_SECRET, {
+//     expiresIn: process.env.ACCESS_TOKEN_EXPIRY
+//   })
+// };
 
-userSchema.methods.generateRefreshToken = function () {
+// userSchema.methods.generateRefreshToken = function () {
 
-  return jwt.sign(
-    {
-      userId: this._id
-    },
-    process.env.JWT_REFRESH_SECRET,
-    {
-      expiresIn: process.env.REFRESH_TOKEN_EXPIRY
-    }
-  );
+//   return jwt.sign(
+//     {
+//       userId: this._id
+//     },
+//     process.env.JWT_REFRESH_SECRET,
+//     {
+//       expiresIn: process.env.REFRESH_TOKEN_EXPIRY
+//     }
+//   );
 
-};
+// };
 
 const User = mongoose.model("user", userSchema);
 export default User;
