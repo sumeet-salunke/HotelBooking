@@ -6,6 +6,7 @@ import rateLimit from "express-rate-limit";
 import morgan from "morgan";
 
 import authRoutes from "./modules/auth/auth.routes.js";
+import hotelRoutes from "./modules/hotel/hotel.routes.js";
 
 import errorMiddleware from "./middlewares/error.middleware.js";
 
@@ -41,6 +42,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/hotels", hotelRoutes);
 
 
 

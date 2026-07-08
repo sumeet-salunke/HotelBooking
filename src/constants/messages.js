@@ -55,3 +55,27 @@ export const AUTH_MESSAGES = Object.freeze({
   INVALID_ACCCESS_TOKEN: "Invalid or expired access token.",
 
 });
+
+export const HOTEL_MESSAGES = {
+  CREATED:
+    "Hotel created successfully.",
+
+  DUPLICATE:
+    "A hotel with this name already exists in this city.",
+
+  NOT_FOUND:
+    "Hotel not found.",
+
+  FORBIDDEN:
+    "You do not have permission to manage this hotel.",
+
+  FETCHED: "Hotels fetched successfully.",
+  INVALID_ID: "Invalid hotel ID.",
+  FETCHED_ONE: "Hotel fetched successfully",
+
+  OWNER_HOTELS_FETCHED: "Your hotels fetched successfully.",
+  INVALID_STATUS: "Invalid hotel status.",
+  EMPTY: "At least one field is required for update.",
+  UPDATED: "Hotel updated successfully.",
+  DELETED: "Hotel Deleted successfully."
+}; 
