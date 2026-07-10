@@ -33,7 +33,7 @@ class HotelRepository {
   async findPublicHotels({ filter, sort, skip, limit }) {
     //both queries are independent, run them concurrently
     const [hotels, totalHotels] = await Promise.all([
-      Hotel.find(filter).sort(sort).limit(limit).lean(), Hotel.countDocuments(filter)
+      Hotel.find(filter).sort(sort).skip(skip).limit(limit).lean(), Hotel.countDocuments(filter)
     ]);
     return {
       hotels, totalHotels,

@@ -70,12 +70,54 @@ export const HOTEL_MESSAGES = {
     "You do not have permission to manage this hotel.",
 
   FETCHED: "Hotels fetched successfully.",
+
   INVALID_ID: "Invalid hotel ID.",
+
   FETCHED_ONE: "Hotel fetched successfully",
 
   OWNER_HOTELS_FETCHED: "Your hotels fetched successfully.",
+
   INVALID_STATUS: "Invalid hotel status.",
+
   EMPTY: "At least one field is required for update.",
+
   UPDATED: "Hotel updated successfully.",
+
   DELETED: "Hotel Deleted successfully."
-}; 
+};
+
+export const ROOM_MESSAGES = {
+  INVALID_HOTEL_ID: "Invalid hotel ID.",
+
+  HOTEL_NOT_FOUND: "Hotel not found.",
+
+  DUPLICATE: "A room with this name already exists in this hotel.",
+
+  CREATED: "Room created successfully.",
+
+  HOTEL_INACTIVE: "Cannot add rooms to an inactive hotel",
+
+  INVALID_ROOM_TYPE: "Invalid room type.",
+
+  INVALID_PRICE: "Price must be a valid non-negative number.",
+
+  INVALID_PRICE_RANGE: "Price range cannot exceed maximum price.",
+
+  INVALID_GUESTS: "Guests must be a positive integer.",
+
+  FETCHED: "Rooms fetched successfully.",
+
+  INVALID_ACTIVE_STATUS: "isActive must be either true or false.",
+
+  INVALID_ROOM_ID: "Invalid romm ID.",
+
+  EMPTY_OBJECT_DATA: "Empty object data.",
+
+  ROOM_NOT_FOUND: "Room not found.",
+
+  UPDATED: "Room updated successfully.",
+
+  DELETED: "Room deleted successfully."
+
+
+}
