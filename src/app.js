@@ -8,6 +8,7 @@ import morgan from "morgan";
 import authRoutes from "./modules/auth/auth.routes.js";
 import hotelRoutes from "./modules/hotel/hotel.routes.js";
 import roomRoutes from "./modules/room/room.routes.js";
+import bookingRoutes from "./modules/booking/booking.routes.js";
 
 
 import errorMiddleware from "./middlewares/error.middleware.js";
@@ -46,7 +47,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/hotels", hotelRoutes);
 app.use("/api/rooms", roomRoutes);
-
+app.use("/api/bookings", bookingRoutes);
 
 
 

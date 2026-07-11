@@ -56,7 +56,7 @@ export const AUTH_MESSAGES = Object.freeze({
 
 });
 
-export const HOTEL_MESSAGES = {
+export const HOTEL_MESSAGES = Object.freeze({
   CREATED:
     "Hotel created successfully.",
 
@@ -84,9 +84,9 @@ export const HOTEL_MESSAGES = {
   UPDATED: "Hotel updated successfully.",
 
   DELETED: "Hotel Deleted successfully."
-};
+});
 
-export const ROOM_MESSAGES = {
+export const ROOM_MESSAGES = Object.freeze({
   INVALID_HOTEL_ID: "Invalid hotel ID.",
 
   HOTEL_NOT_FOUND: "Hotel not found.",
@@ -120,4 +120,54 @@ export const ROOM_MESSAGES = {
   DELETED: "Room deleted successfully."
 
 
-}
+})
+
+export const BOOKING_MESSAGES = Object.freeze({
+  CREATED:
+    "Booking created successfully.",
+
+  FETCHED:
+    "Booking fetched successfully.",
+
+  FETCHED_ALL:
+    "Bookings fetched successfully.",
+
+  CANCELLED:
+    "Booking cancelled successfully.",
+
+  INVALID_BOOKING_ID:
+    "Invalid booking ID.",
+
+  INVALID_ROOM_ID:
+    "Invalid room ID.",
+
+  ROOM_NOT_FOUND:
+    "Room not found.",
+
+  HOTEL_NOT_FOUND:
+    "Hotel not found.",
+
+  BOOKING_NOT_FOUND:
+    "Booking not found.",
+
+  INVALID_DATES:
+    "Check-out date must be after check-in date.",
+
+  PAST_CHECK_IN:
+    "Check-in date cannot be in the past.",
+
+  INVALID_QUANTITY:
+    "Requested room quantity is invalid.",
+
+  INVALID_GUESTS:
+    "Guest count is invalid for the selected rooms.",
+
+  INSUFFICIENT_AVAILABILITY:
+    "Requested number of rooms is not available for the selected dates.",
+
+  ALREADY_CANCELLED:
+    "Booking is already cancelled.",
+
+  CANNOT_CANCEL:
+    "This booking cannot be cancelled."
+});
