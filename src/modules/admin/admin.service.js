@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
 import adminRepository from "./admin.repository.js";
 
+import ApiError from "../../utils/ApiError.js";
 import { HOTEL_STATUS } from "../../constants/hotelStatus.js";
 import { ADMIN_MESSAGES } from "../../constants/messages.js";
+import { ROLES } from "../../constants/roles.js";
 
 class AdminService {
   escapeRegex(text) {
@@ -133,10 +135,6 @@ class AdminService {
       }
     };
 
-  }
-
-  escapeRegex(text) {
-    return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   }
 
   async getUsers(query) {

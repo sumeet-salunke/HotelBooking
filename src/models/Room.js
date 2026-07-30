@@ -39,8 +39,7 @@ const roomSchema = new mongoose.Schema({
     required: true,
     min: [1, "Maximun guests must be atleast 1"],
     max: [20, "Maximum guests cannot exceed 20"],
-    //integer validation
-    vaildate: {
+    validate: {
       validator: Number.isInteger,
       message: "Maximum guests must be an integer"
     }
@@ -49,7 +48,6 @@ const roomSchema = new mongoose.Schema({
     type: Number,
     required: true,
     min: [1, "Total rooms must be atleast 1"],
-    //integer validation
     validate: {
       validator: Number.isInteger,
       message: "Total rooms must be integer"
@@ -83,6 +81,14 @@ const roomSchema = new mongoose.Schema({
     default: null,
   }
 }, { timestamps: true });
+
+roomSchema.index({
+  hotelId: 1,
+  isActive: 1,
+  isDeleted: 1,
+  roomType: 1,
+  pricePerNight: 1
+});
 
 const Room = mongoose.model("Room", roomSchema);
 export default Room;

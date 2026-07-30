@@ -61,9 +61,17 @@ Does NOT count:
   }
   //customer booking history
   async findUserBookings({ filter, skip, limit }) {
-    const [bookings, totalBookings] = await Promise.all([(await Booking.find(filter)).toSorted({
-      createdAt: -1, _id: 1
-    }).skip(skip).limit(limit).lean(), Booking.countDocuments(filter)]);
+    const [bookings, totalBookings] = await Promise.all([
+      Booking.find(filter)
+        .sort({
+          createdAt: -1,
+          _id: 1
+        })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      Booking.countDocuments(filter)
+    ]);
     return {
       bookings, totalBookings
     };
@@ -104,7 +112,7 @@ Does NOT count:
     }, {
       new: true
     })
-      .populate("userId", "name email").populate("hotelId", "name").populate("roomId", "name roomtype").lean()
+      .populate("userId", "name email").populate("hotelId", "name").populate("roomId", "name roomType").lean()
   }
   async cancelOwnerBooking(
     bookingId,

@@ -12,6 +12,29 @@ const options = {
         "REST API for Hotel Booking System built with Node.js, Express.js and MongoDB."
     },
 
+    tags: [
+      {
+        name: "Authentication",
+        description: "User authentication APIs"
+      },
+      {
+        name: "Hotels",
+        description: "Hotel management"
+      },
+      {
+        name: "Rooms",
+        description: "Room management"
+      },
+      {
+        name: "Bookings",
+        description: "Booking management"
+      },
+      {
+        name: "Admin",
+        description: "Admin operations"
+      }
+    ],
+
     servers: [
       {
         url: "http://localhost:5000",
@@ -42,29 +65,6 @@ const options = {
 };
 
 const swaggerSpec = swaggerJsdoc(options);
-
-tags: [
-  {
-    name: "Authentication",
-    description: "User authentication APIs"
-  },
-  {
-    name: "Hotels",
-    description: "Hotel management"
-  },
-  {
-    name: "Rooms",
-    description: "Room management"
-  },
-  {
-    name: "Bookings",
-    description: "Booking management"
-  },
-  {
-    name: "Admin",
-    description: "Admin operations"
-  }
-]
 
 export {
   swaggerUi,

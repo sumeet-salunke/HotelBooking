@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 import ApiError from "../../utils/ApiError.js";
 import generateOTP from "../../utils/generateOTP.js";
@@ -300,8 +301,10 @@ class AuthService {
     let decoded;
     try {
       decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-      console.log("decoded", decoded);
     } catch (error) {
+      throw new ApiError(401, AUTH_MESSAGES.INVALID_REFRESH_TOKEN);
+    }
+    if (!mongoose.Types.ObjectId.isValid(decoded.userId)) {
       throw new ApiError(401, AUTH_MESSAGES.INVALID_REFRESH_TOKEN);
     }
 
@@ -335,7 +338,7 @@ class AuthService {
     const accessToken = generateAccessToken(user);
     //return
     return {
-      messsage: AUTH_MESSAGES.TOKEN_REFRESH_SUCCESS,
+      message: AUTH_MESSAGES.TOKEN_REFRESH_SUCCESS,
       data: {
         accessToken
       }
@@ -357,7 +360,7 @@ class AuthService {
     }
   }
 
-  async forgotPasssword(data) {
+  async forgotPassword(data) {
     const { email } = data;
     const user = await userRepository.findByEmail(email);
     if (!user) {

@@ -1,4 +1,5 @@
 import Hotel from "../../models/Hotel.js";
+import User from "../../models/User.js";
 import { HOTEL_STATUS } from "../../constants/hotelStatus.js";
 
 

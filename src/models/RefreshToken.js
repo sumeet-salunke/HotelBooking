@@ -11,7 +11,8 @@ const refreshTokenSchema = new mongoose.Schema(
 
     token: {
       type: String,
-      required: true
+      required: true,
+      index: true
     },
 
     isRevoked: {
@@ -42,6 +43,11 @@ const refreshTokenSchema = new mongoose.Schema(
 refreshTokenSchema.index({
   userId: 1,
   token: 1
+});
+
+refreshTokenSchema.index({
+  token: 1,
+  isRevoked: 1
 });
 
 const RefreshToken = mongoose.model(

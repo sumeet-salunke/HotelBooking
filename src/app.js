@@ -4,6 +4,9 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
 import morgan from "morgan";
+import mongoSanitize from "express-mongo-sanitize";
+import hpp from "hpp";
+import compression from "compression";
 
 import authRoutes from "./modules/auth/auth.routes.js";
 import hotelRoutes from "./modules/hotel/hotel.routes.js";
@@ -24,20 +27,23 @@ app.use(cors({
   origin: process.env.CLIENT_URI,
   credentials: true
 }));
+app.use(compression());
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
   message: "Too many requests. Please try again later."
 });
 app.use(limiter);
 
-//logging
 app.use(morgan("dev"));
 
-//body parsers
-app.use(express.json());
+app.use(express.json({ limit: "1mb" }));
 app.use(cookieParser());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: "1mb" }));
+app.use(mongoSanitize());
+app.use(hpp());
 
 //health check
 app.get("/", (req, res) => {
@@ -67,14 +73,6 @@ app.use((req, res) => {
     message: "Route not found"
   });
 });
-//global error middleware
-// app.use((err, req, res, next) => {
-//   const statusCode = err.statusCode || 500;
-//   return res.status(statusCode).json({
-//     success: false,
-//     message: err.message || "Internal server error"
-//   });
-// });
 app.use(errorMiddleware);
 
 export default app;

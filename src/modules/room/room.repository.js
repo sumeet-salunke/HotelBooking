@@ -13,7 +13,7 @@ class RoomRepository {
     return await Room.findOne({
       hotelId,
       name: {
-        $regex: `^${escapedName}`, $options: "i"
+        $regex: `^${escapedName}$`, $options: "i"
       },
       isDeleted: false
     });

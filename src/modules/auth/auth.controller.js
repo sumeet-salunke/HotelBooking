@@ -36,11 +36,11 @@ export const logout = asyncHandler(async (req, res) => {
   const refreshToken = req.cookies?.refreshToken;
   const result = await authService.logout(refreshToken);
   res.clearCookie("refreshToken", clearCookieOptions);
-  return res.status(200).json(new ApiResponse(200, result.messsage, result.data));
+  return res.status(200).json(new ApiResponse(200, result.message, result.data));
 });
 
 export const forgotPassword = asyncHandler(async (req, res) => {
-  const result = await authService.forgotPasssword(req.body);
+  const result = await authService.forgotPassword(req.body);
   return res.status(200).json(new ApiResponse(200, result.message, result.data));
 });
 

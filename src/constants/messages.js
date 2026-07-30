@@ -45,7 +45,6 @@ export const AUTH_MESSAGES = Object.freeze({
   INVALID_REFRESH_TOKEN: "Invalid or expired refresh token.",
   SESSION_EXPIRED: "Session expired. Please login again.",
   TOKEN_REFRESH_SUCCESS: "Access token refreshed successfully",
-  LOGOUT_SUCCESS: "Logged out successfully",
   PASSWORD_RESET_OTP_SENT: "If an account exists with this email, a password reset OTP has been sent.",
 
   PASSWORD_RESET_SUCCESS: "Password reset successfully",
@@ -208,12 +207,8 @@ export const ADMIN_MESSAGES = {
   HOTEL_CANNOT_REJECT:
     "Hotel cannot be rejected.",
 
-  REJECTION_REASON_REQUIRED:
-    "Rejection reason is required.",
-
-  HOTEL_REJECTED:
-    "Hotel rejected successfully.",
-
+  HOTEL_CANNOT_APPROVE:
+    "Hotel cannot be approved.",
 
   USER_UPDATED:
     "User status updated successfully.",
@@ -223,6 +218,12 @@ export const ADMIN_MESSAGES = {
 
   INVALID_USER_ID:
     "Invalid user id.",
+
+  INVALID_ROLE:
+    "Invalid user role.",
+
+  USERS_FETCHED:
+    "Users fetched successfully.",
 
   CANNOT_UPDATE_SELF:
     "You cannot change your own account status."

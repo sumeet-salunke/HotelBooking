@@ -53,7 +53,6 @@ class UserRepository {
   }
 
   async updateById(userId, updateData) {
-    console.log("Updating user: ", userId, updateData);
     return await User.findByIdAndUpdate(userId, updateData, { new: true });
   }
   async save(user) {

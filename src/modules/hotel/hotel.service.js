@@ -79,7 +79,7 @@ class HotelService {
         };
         break;
 
-      case "rating_desc":
+      case "rating_asc":
         sortOptions = {
           averageRating: 1,
           _id: 1
@@ -199,9 +199,9 @@ class HotelService {
       Object.prototype.hasOwnProperty.call(updateData, field));
     //re-approval rule
     if (
-      hotel.status === HOTEL_MESSAGES.APPROVED && hasMaterialChange
+      hotel.status === HOTEL_STATUS.APPROVED && hasMaterialChange
     ) {
-      safeUpdate.status = HOTEL_MESSAGES.PENDING;
+      safeUpdate.status = HOTEL_STATUS.PENDING;
       safeUpdate.rejectionReason = null;
     }
     //update hotel

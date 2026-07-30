@@ -2,6 +2,7 @@ import cron from "node-cron";
 
 import bookingService
   from "../modules/booking/booking.service.js";
+import logger from "../config/logger.js";
 
 const startBookingCron = () => {
 
@@ -21,23 +22,13 @@ const startBookingCron = () => {
           await bookingService
             .expirePendingBookings();
 
-        console.log(
-
-          `Expired Bookings: ${result.modifiedCount}`
-
-        );
+        logger.info(`Expired Bookings: ${result.modifiedCount}`);
 
       }
 
       catch (error) {
 
-        console.error(
-
-          "Booking Cron Error:",
-
-          error.message
-
-        );
+        logger.error(`Booking Cron Error: ${error.message}`);
 
       }
 

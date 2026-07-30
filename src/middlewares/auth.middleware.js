@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 import ApiError from "../utils/ApiError.js";
 import userRepository from "../repositories/user.repository.js";
@@ -23,14 +24,24 @@ export const authenticate = async (req, res, next) => {
     } catch (error) {
       throw new ApiError(401, AUTH_MESSAGES.INVALID_ACCCESS_TOKEN);
     }
+    if (!mongoose.Types.ObjectId.isValid(decoded.userId)) {
+      throw new ApiError(401, AUTH_MESSAGES.INVALID_ACCCESS_TOKEN);
+    }
     //find current user 
     const user = await userRepository.findById(decoded.userId);
     if (!user) {
       throw new ApiError(401, AUTH_MESSAGES.USER_NOT_FOUND);
     }
+    if (!user.isActive) {
+      throw new ApiError(403, AUTH_MESSAGES.ACCOUNT_DISABLED);
+    }
+    const decodedTokenVersion = decoded.tokenVersion ?? 0;
+    if (decodedTokenVersion !== (user.tokenVersion ?? 0)) {
+      throw new ApiError(401, AUTH_MESSAGES.INVALID_ACCCESS_TOKEN);
+    }
     //attach safe user context
     req.user = {
-      id: user._id,
+      id: user._id.toString(),
       role: user.role,
       email: user.email,
       isVerified: user.isVerified

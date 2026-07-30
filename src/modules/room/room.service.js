@@ -251,7 +251,7 @@ class RoomService {
     //Room->Hotel->Owner
     const hotel = await hotelRepository.findOwnedHotelById(room.hotelId, ownerId);
     if (!hotel) {
-      throw new APiError(404, ROOM_MESSAGES.ROOM_NOT_FOUND);
+      throw new ApiError(404, ROOM_MESSAGES.ROOM_NOT_FOUND);
     }
     //duplicate name check, exculding current room
     if (updateData.name !== undefined) {
@@ -361,7 +361,9 @@ class RoomService {
         roomName: room.name,
         totalRooms: room.totalRooms,
         bookedRooms,
-        availableRooms, checkIn, checkOut
+        availableRooms,
+        checkIn,
+        checkOut
       }
     };
   }
