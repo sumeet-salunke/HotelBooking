@@ -117,7 +117,12 @@ export const ROOM_MESSAGES = Object.freeze({
 
   UPDATED: "Room updated successfully.",
 
-  DELETED: "Room deleted successfully."
+  DELETED: "Room deleted successfully.",
+
+  INVALID_CHECKIN_DATE: "Invalid check-in date.",
+  INVALID_CHECKOUT_DATE: "Invalid check-out date.",
+  INVALID_DATE_RANGE: "Check-out date must be after check-in date.",
+  ROOM_AVAILaBILITY_FETCHED: "Room availability fetched successfully.",
 
 
 })
@@ -169,5 +174,57 @@ export const BOOKING_MESSAGES = Object.freeze({
     "Booking is already cancelled.",
 
   CANNOT_CANCEL:
-    "This booking cannot be cancelled."
+    "This booking cannot be cancelled.",
+
+  BOOKING_CONFIRMED: "Booking confirmed successfully.",
+
+  INVALID_BOOKING_STATUS: "Booking cannot be confirmed.",
+  BOOKING_COMPLETED: "Booking completed successfully.",
+  BOOKING_CANNOT_COMPLETE: "Booking cannot be completed.",
+  BOOKING_NOT_FINISHED: "Guest has not checked out yet.",
+
+
 });
+
+export const ADMIN_MESSAGES = {
+
+  PENDING_HOTELS_FETCHED:
+    "Pending hotels fetched successfully.",
+
+  HOTEL_APPROVED:
+    "Hotel approved successfully.",
+
+  HOTEL_REJECTED:
+    "Hotel rejected successfully.",
+
+  HOTEL_NOT_FOUND:
+    "Hotel not found.",
+
+  INVALID_HOTEL_ID:
+    "Invalid hotel id.",
+
+  REJECTION_REASON_REQUIRED:
+    "Rejection reason is required.",
+  HOTEL_CANNOT_REJECT:
+    "Hotel cannot be rejected.",
+
+  REJECTION_REASON_REQUIRED:
+    "Rejection reason is required.",
+
+  HOTEL_REJECTED:
+    "Hotel rejected successfully.",
+
+
+  USER_UPDATED:
+    "User status updated successfully.",
+
+  USER_NOT_FOUND:
+    "User not found.",
+
+  INVALID_USER_ID:
+    "Invalid user id.",
+
+  CANNOT_UPDATE_SELF:
+    "You cannot change your own account status."
+
+};

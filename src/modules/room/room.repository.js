@@ -83,6 +83,13 @@ class RoomRepository {
       new: true
     });
   }
+  async findRoomById(roomId) {
+    return await Room.findOne({
+      _id: roomId,
+      isDeleted: false,
+      isActive: true
+    }).lean();
+  }
 }
 
 export default new RoomRepository();

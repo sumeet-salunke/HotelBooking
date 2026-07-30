@@ -4,6 +4,7 @@ import hotelRepository from "../hotel/hotel.repository.js";
 import roomRepository from "./room.repository.js";
 import { ROOM_MESSAGES } from "../../constants/messages.js";
 import { ROOM_TYPE } from "../../constants/roomType.js";
+import bookingRepository from "../booking/booking.repository.js";
 
 class RoomService {
   async createRoom(ownerId, roomData) {
@@ -323,6 +324,45 @@ class RoomService {
     return {
       message: ROOM_MESSAGES.DELETED,
       data: null
+    };
+  }
+
+  async getRoomAvailaility(roomId, query) {
+    if (!mongoose.Types.ObjectId.isValid(roomId)) {
+      throw new ApiError(400, ROOM_MESSAGES.INVALID_ROOM_ID);
+    }
+    let { checkIn, checkOut } = query;
+    //validate dates
+    const checkInDate = new Date(checkIn);
+    const checkOutDate = new Date(checkOut);
+    if (Number.isNaN(checkInDate.getTime())) {
+      throw new ApiError(400, ROOM_MESSAGES.INVALID_CHECKIN_DATE);
+    }
+    if (Number.isNaN(checkOutDate.getTime())) {
+      throw new ApiError(400, ROOM_MESSAGES.INVALID_CHECKOUT_DATE);
+    }
+    if (checkOutDate <= checkInDate) {
+      throw new ApiError(400, ROOM_MESSAGES.INVALID_DATE_RANGE);
+    }
+    //get room
+    const room = await roomRepository.findRoomById(roomId);
+    if (!room) {
+      throw new ApiError(404, ROOM_MESSAGES.ROOM_NOT_FOUND);
+
+    }
+    //already existing logic
+    const bookedRooms = await bookingRepository.calculateBookedQuantity(roomId, checkInDate, checkOutDate);
+
+    const availableRooms = Math.max(room.totalRooms - bookedRooms, 0);
+    return {
+      message: ROOM_MESSAGES.ROOM_AVAILaBILITY_FETCHED,
+      data: {
+        roomId: room._id,
+        roomName: room.name,
+        totalRooms: room.totalRooms,
+        bookedRooms,
+        availableRooms, checkIn, checkOut
+      }
     };
   }
 

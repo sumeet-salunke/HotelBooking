@@ -4,7 +4,10 @@ import {
   createBooking,
   getMyBookings,
   getMyBookingById,
-  cancelMyBooking
+  cancelMyBooking,
+  confirmBooking,
+  cancelOwnerBooking,
+  completeOwnerBooking
 } from "./booking.controller.js";
 
 import {
@@ -54,17 +57,10 @@ router.post(
 );
 
 
-/*
-Get one owned booking
-*/
-router.get(
-  "/:bookingId",
-  authenticate,
-  authorizeRoles(ROLES.CUSTOMER),
-  getMyBookingById
-);
 
 
+//confirm
+router.patch("/owner/:bookingId/confirm", authenticate, authorizeRoles(ROLES.HOTEL_OWNER), confirmBooking);
 /*
 Cancel owned booking
 */
@@ -75,5 +71,41 @@ router.patch(
   cancelMyBooking
 );
 
+router.patch(
 
+  "/owner/:bookingId/cancel",
+
+  authenticate,
+
+  authorizeRoles(
+    ROLES.HOTEL_OWNER
+  ),
+
+  cancelOwnerBooking
+
+);
+
+router.patch(
+
+  "/owner/:bookingId/complete",
+
+  authenticate,
+
+  authorizeRoles(
+    ROLES.HOTEL_OWNER
+  ),
+
+  completeOwnerBooking
+
+);
+
+/*
+Get one owned booking
+*/
+router.get(
+  "/:bookingId",
+  authenticate,
+  authorizeRoles(ROLES.CUSTOMER),
+  getMyBookingById
+);
 export default router;

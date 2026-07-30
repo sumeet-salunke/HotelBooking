@@ -14,7 +14,7 @@ class HotelRepository {
   async findByOwner(ownerId) {
     return await Hotel.find({
       ownerId, isDeleted: false
-    });
+    }).lean();
   }
   async findDuplicate(ownerId, name, city) {
     return await Hotel.findOne({
@@ -90,6 +90,16 @@ class HotelRepository {
       new: true
     }
     );
+  }
+
+  async findOwnerHotelIds(ownerId) {
+    return await Hotel.find({
+      ownerId,
+      isDeleted: false
+    })
+      .select("_id")
+      .lean();
+
   }
 }
 export default new HotelRepository();

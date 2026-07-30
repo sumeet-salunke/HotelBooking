@@ -9,7 +9,36 @@ import { register, verifyOTP, login, refreshAccessToken, logout, forgotPassword,
 import { authenticate } from "../../middlewares/auth.middleware.js";
 
 const router = Router();
-
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     tags:
+ *       - Authentication
+ *     summary: Login user
+ *     description: Login using email and password.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: sumeet@gmail.com
+ *               password:
+ *                 type: string
+ *                 example: Password@123
+ *     responses:
+ *       200:
+ *         description: Login successful.
+ *       401:
+ *         description: Invalid credentials.
+ */
 router.post("/register", validate(registerSchema), register);
 
 router.post("/verify-otp", validate(verifyOTPSchema), verifyOTP);

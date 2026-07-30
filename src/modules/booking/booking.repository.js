@@ -89,6 +89,161 @@ Does NOT count:
       runValidators: true
     }).lean();
   }
+
+  async confirmOwnerBooking(bookingId, hotelIds) {
+    return await Booking.findOneAndUpdate({
+      _id: bookingId,
+      hotelId: {
+        $in: hotelIds
+      },
+      status: BOOKING_STATUS.PENDING
+    }, {
+      $set: {
+        status: BOOKING_STATUS.CONFIRMED
+      }
+    }, {
+      new: true
+    })
+      .populate("userId", "name email").populate("hotelId", "name").populate("roomId", "name roomtype").lean()
+  }
+  async cancelOwnerBooking(
+    bookingId,
+    hotelIds
+  ) {
+
+    return await Booking.findOneAndUpdate(
+      {
+        _id: bookingId,
+
+        hotelId: {
+          $in: hotelIds
+        },
+
+        status: {
+          $in: [
+            BOOKING_STATUS.PENDING,
+            BOOKING_STATUS.CONFIRMED
+          ]
+        }
+      },
+
+      {
+        $set: {
+          status: BOOKING_STATUS.CANCELLED,
+          cancelledAt: new Date()
+        }
+      },
+
+      {
+        returnDocument: "after"
+      }
+    )
+
+      .populate("userId", "name email")
+
+      .populate("hotelId", "name")
+
+      .populate("roomId", "name roomType")
+
+      .lean();
+
+  }
+  async findOwnerBookingForCompletion(
+    bookingId,
+    hotelIds
+  ) {
+
+    return await Booking.findOne({
+
+      _id: bookingId,
+
+      hotelId: {
+
+        $in: hotelIds
+
+      }
+
+    });
+
+  }
+  async completeOwnerBooking(
+    bookingId
+  ) {
+
+    return await Booking.findByIdAndUpdate(
+
+      bookingId,
+
+      {
+
+        $set: {
+
+          status: BOOKING_STATUS.COMPLETED,
+
+          completedAt: new Date()
+
+        }
+
+      },
+
+      {
+
+        returnDocument: "after"
+
+      }
+
+    )
+
+      .populate(
+        "userId",
+        "name email"
+      )
+
+      .populate(
+        "hotelId",
+        "name"
+      )
+
+      .populate(
+        "roomId",
+        "name roomType"
+      )
+
+      .lean();
+
+  }
+
+  async expirePendingBookings() {
+
+    return await Booking.updateMany(
+
+      {
+
+        status: BOOKING_STATUS.PENDING,
+
+        expiresAt: {
+
+          $lte: new Date()
+
+        }
+
+      },
+
+      {
+
+        $set: {
+
+          status: BOOKING_STATUS.CANCELLED,
+
+          cancelledAt: new Date()
+
+        }
+
+      }
+
+    );
+
+  }
 }
 
 export default new BookingRepository();

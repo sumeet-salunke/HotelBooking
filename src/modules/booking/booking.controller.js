@@ -108,3 +108,69 @@ export const cancelMyBooking =
       );
     }
   );
+
+export const confirmBooking = asyncHandler(async (req, res) => {
+  console.log("params: ", req.params)
+  const ownerId = req.user.id;
+  const bookingId = req.params.bookingId;
+  console.log("Booking Id", bookingId);
+  const result = bookingService.confirmBooking(ownerId, bookingId);
+  return res.status(200).json(new ApiResponse(200, result.message, result.data));
+});
+
+export const cancelOwnerBooking =
+  asyncHandler(async (req, res) => {
+
+    const ownerId =
+      req.user.id;
+
+    const bookingId =
+      req.params.bookingId;
+
+    const result =
+      await bookingService.cancelOwnerBooking(
+        ownerId,
+        bookingId
+      );
+
+    return res.status(200).json(
+      new ApiResponse(
+        200,
+        result.message,
+        result.data
+      )
+    );
+
+  });
+
+
+export const completeOwnerBooking =
+  asyncHandler(async (req, res) => {
+
+    const ownerId =
+      req.user.id;
+
+    const bookingId =
+      req.params.bookingId;
+
+    const result =
+      await bookingService.completeOwnerBooking(
+        ownerId,
+        bookingId
+      );
+
+    return res.status(200).json(
+
+      new ApiResponse(
+
+        200,
+
+        result.message,
+
+        result.data
+
+      )
+
+    );
+
+  });

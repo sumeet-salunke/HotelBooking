@@ -9,7 +9,10 @@ import authRoutes from "./modules/auth/auth.routes.js";
 import hotelRoutes from "./modules/hotel/hotel.routes.js";
 import roomRoutes from "./modules/room/room.routes.js";
 import bookingRoutes from "./modules/booking/booking.routes.js";
+import adminRoutes from "./modules/admin/admin.routes.js";
 
+
+import { swaggerUi, swaggerSpec } from "./config/swagger.js";
 
 import errorMiddleware from "./middlewares/error.middleware.js";
 
@@ -44,10 +47,17 @@ app.get("/", (req, res) => {
   });
 });
 
+
+app.use(
+  "/api/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec)
+);
 app.use("/api/auth", authRoutes);
 app.use("/api/hotels", hotelRoutes);
 app.use("/api/rooms", roomRoutes);
 app.use("/api/bookings", bookingRoutes);
+app.use("/api/admin", adminRoutes);
 
 
 
@@ -58,13 +68,13 @@ app.use((req, res) => {
   });
 });
 //global error middleware
-app.use((err, req, res, next) => {
-  const statusCode = err.statusCode || 500;
-  return res.status(statusCode).json({
-    success: false,
-    message: err.message || "Internal server error"
-  });
-});
+// app.use((err, req, res, next) => {
+//   const statusCode = err.statusCode || 500;
+//   return res.status(statusCode).json({
+//     success: false,
+//     message: err.message || "Internal server error"
+//   });
+// });
 app.use(errorMiddleware);
 
 export default app;

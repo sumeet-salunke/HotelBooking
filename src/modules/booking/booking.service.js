@@ -587,6 +587,175 @@ class BookingService {
     };
   }
 
+  async confirmBooking(ownerId, bookingId) {
+    //validate booking Id
+    if (!mongoose.Types.ObjectId.isValid(bookingId)) {
+      throw new ApiError(400, BOOKING_MESSAGES.INVALID_BOOKING_ID);
+    }
+    //find owner hotels
+    const ownerHotels = await hotelRepository.findOwnerHotelIds(ownerId);
+    const hotelIds = ownerHotels.map(hotel => hotel._id);
+    //confirm booking
+    const booking = await bookingRepository.confirmOwnerBooking(bookingId, hotelIds);
+    if (!booking) {
+      throw new ApiError(400, BOOKING_MESSAGES.INVALID_BOOKING_STATUS);
+
+    }
+    return {
+      message: BOOKING_MESSAGES.BOOKING_CONFIRMED,
+      data: {
+        booking
+      }
+    };
+  }
+  async cancelOwnerBooking(
+    ownerId,
+    bookingId
+  ) {
+
+    if (
+      !mongoose.Types.ObjectId.isValid(
+        bookingId
+      )
+    ) {
+
+      throw new ApiError(
+        400,
+        BOOKING_MESSAGES.INVALID_BOOKING_ID
+      );
+
+    }
+
+    const ownerHotels =
+      await hotelRepository.findOwnerHotelIds(
+        ownerId
+      );
+
+    const hotelIds =
+      ownerHotels.map(
+        hotel => hotel._id
+      );
+
+    const booking =
+      await bookingRepository.cancelOwnerBooking(
+        bookingId,
+        hotelIds
+      );
+
+    if (!booking) {
+
+      throw new ApiError(
+        400,
+        "Booking cannot be cancelled."
+      );
+
+    }
+
+    return {
+
+      message:
+        "Booking cancelled successfully.",
+
+      data: {
+
+        booking
+
+      }
+
+    };
+
+  }
+  async completeOwnerBooking(
+    ownerId,
+    bookingId
+  ) {
+
+    if (
+      !mongoose.Types.ObjectId.isValid(
+        bookingId
+      )
+    ) {
+
+      throw new ApiError(
+        400,
+        BOOKING_MESSAGES.INVALID_BOOKING_ID
+      );
+
+    }
+
+    const ownerHotels =
+      await hotelRepository.findOwnerHotelIds(
+        ownerId
+      );
+
+    const hotelIds =
+      ownerHotels.map(
+        hotel => hotel._id
+      );
+
+    const booking =
+      await bookingRepository.findOwnerBookingForCompletion(
+        bookingId,
+        hotelIds
+      );
+
+    if (!booking) {
+
+      throw new ApiError(
+        404,
+        BOOKING_MESSAGES.BOOKING_NOT_FOUND
+      );
+
+    }
+
+    if (
+      booking.status !==
+      BOOKING_STATUS.CONFIRMED
+    ) {
+
+      throw new ApiError(
+        400,
+        BOOKING_MESSAGES.BOOKING_CANNOT_COMPLETE
+      );
+
+    }
+
+    const today = new Date();
+
+    if (
+      today < booking.checkOut
+    ) {
+
+      throw new ApiError(
+        400,
+        BOOKING_MESSAGES.BOOKING_NOT_FINISHED
+      );
+
+    }
+
+    const updatedBooking =
+      await bookingRepository.completeOwnerBooking(
+        bookingId
+      );
+
+    return {
+
+      message:
+        BOOKING_MESSAGES.BOOKING_COMPLETED,
+
+      data: {
+
+        booking: updatedBooking
+
+      }
+
+    };
+
+  }
+  async expirePendingBookings() {
+    return await bookingRepository.expirePendingBookings();
+  }
+
   /*
   ========================================
   DATE HELPERS
@@ -673,6 +842,8 @@ class BookingService {
       ) / MS_PER_DAY
     );
   }
+
+
 }
 
 export default new BookingService();
