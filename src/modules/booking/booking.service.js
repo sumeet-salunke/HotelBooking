@@ -423,6 +423,58 @@ class BookingService {
 
   /*
   ========================================
+  GET OWNER BOOKINGS
+  ========================================
+  */
+
+  async getOwnerBookings(ownerId, query) {
+    let { page, limit, status } = query;
+
+    page = Number(page);
+    limit = Number(limit);
+
+    page = Number.isFinite(page) && page >= 1 ? Math.floor(page) : 1;
+    limit = Number.isFinite(limit) && limit >= 1 ? Math.min(Math.floor(limit), 50) : 10;
+
+    const filter = {};
+
+    if (status) {
+      if (!Object.values(BOOKING_STATUS).includes(status)) {
+        throw new ApiError(400, "Invalid booking status.");
+      }
+      filter.status = status;
+    }
+
+    const ownerHotels = await hotelRepository.findOwnerHotelIds(ownerId);
+    const hotelIds = ownerHotels.map(hotel => hotel._id);
+
+    const skip = (page - 1) * limit;
+
+    const { bookings, totalBookings } = await bookingRepository.findOwnerBookings({
+      hotelIds,
+      filter,
+      skip,
+      limit
+    });
+
+    const totalPages = Math.ceil(totalBookings / limit);
+
+    return {
+      message: BOOKING_MESSAGES.FETCHED_ALL,
+      data: {
+        bookings,
+        pagination: {
+          page,
+          limit,
+          totalBookings,
+          totalPages
+        }
+      }
+    };
+  }
+
+  /*
+  ========================================
   GET MY BOOKING BY ID
   ========================================
   */

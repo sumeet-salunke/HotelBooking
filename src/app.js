@@ -23,8 +23,10 @@ const app = express();
 app.set("trust proxy", 1);
 
 app.use(helmet());
+const clientOrigin = process.env.CLIENT_URI ? process.env.CLIENT_URI.replace(/\/$/, "") : "http://localhost:5173";
+
 app.use(cors({
-  origin: process.env.CLIENT_URI,
+  origin: clientOrigin,
   credentials: true
 }));
 app.use(compression());
@@ -42,8 +44,8 @@ app.use(morgan("dev"));
 app.use(express.json({ limit: "1mb" }));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true, limit: "1mb" }));
-app.use(mongoSanitize());
-app.use(hpp());
+// app.use(mongoSanitize()); // Disabled: incompatible with Express 5 as req.query is now a getter
+// app.use(hpp()); // Disabled: hpp is incompatible with Express 5 as req.query is now a getter
 
 //health check
 app.get("/", (req, res) => {

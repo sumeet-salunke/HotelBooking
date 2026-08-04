@@ -8,6 +8,12 @@ import bookingService
   from "./booking.service.js";
 
 
+export const getOwnerBookings = asyncHandler(async (req, res) => {
+  const ownerId = req.user.id;
+  const result = await bookingService.getOwnerBookings(ownerId, req.query);
+  return res.status(200).json(new ApiResponse(200, result.message, result.data));
+});
+
 export const createBooking =
   asyncHandler(
     async (req, res) => {

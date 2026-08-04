@@ -1,15 +1,16 @@
 import mongoose from "mongoose";
 import Booking from "../../models/Booking.js";
 import { BOOKING_STATUS } from "../../constants/bookingStatus.js";
+
 class BookingRepository {
   /*
-calculate consumed inventory
-counts:
-1. CONFIRMED BOOKING
-2. PENDING booking whose hold has not expired
-Does NOT count:
--cancelled
--expired pending
+  calculate consumed inventory
+  counts:
+  1. CONFIRMED BOOKING
+  2. PENDING booking whose hold has not expired
+  Does NOT count:
+  -cancelled
+  -expired pending
   */
   async calculateBookedQuantity(roomId, checkIn, checkOut) {
     const now = new Date();
@@ -50,8 +51,8 @@ Does NOT count:
   //create booking
   async create(data) {
     return await Booking.create(data);
-
   }
+  
   //find customer-owned booking
   async findOwnedBookingById(bookingId, userId) {
     return await Booking.findOne({
@@ -59,6 +60,7 @@ Does NOT count:
       userId
     }).lean();
   }
+  
   //customer booking history
   async findUserBookings({ filter, skip, limit }) {
     const [bookings, totalBookings] = await Promise.all([
@@ -76,6 +78,24 @@ Does NOT count:
       bookings, totalBookings
     };
   }
+
+  //owner booking history
+  async findOwnerBookings({ hotelIds, filter, skip, limit }) {
+    const ownerFilter = { ...filter, hotelId: { $in: hotelIds } };
+    const [bookings, totalBookings] = await Promise.all([
+      Booking.find(ownerFilter)
+        .populate("userId", "name email")
+        .populate("hotelId", "name")
+        .populate("roomId", "name roomType")
+        .sort({ createdAt: -1, _id: 1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      Booking.countDocuments(ownerFilter)
+    ]);
+    return { bookings, totalBookings };
+  }
+  
   //cancel customer booking
   async cancelOwnedBooking(bookingId, userId) {
     return await Booking.findOneAndUpdate({
@@ -114,19 +134,14 @@ Does NOT count:
     })
       .populate("userId", "name email").populate("hotelId", "name").populate("roomId", "name roomType").lean()
   }
-  async cancelOwnerBooking(
-    bookingId,
-    hotelIds
-  ) {
 
+  async cancelOwnerBooking(bookingId, hotelIds) {
     return await Booking.findOneAndUpdate(
       {
         _id: bookingId,
-
         hotelId: {
           $in: hotelIds
         },
-
         status: {
           $in: [
             BOOKING_STATUS.PENDING,
@@ -134,123 +149,65 @@ Does NOT count:
           ]
         }
       },
-
       {
         $set: {
           status: BOOKING_STATUS.CANCELLED,
           cancelledAt: new Date()
         }
       },
-
       {
         returnDocument: "after"
       }
     )
-
       .populate("userId", "name email")
-
       .populate("hotelId", "name")
-
       .populate("roomId", "name roomType")
-
       .lean();
-
   }
-  async findOwnerBookingForCompletion(
-    bookingId,
-    hotelIds
-  ) {
 
+  async findOwnerBookingForCompletion(bookingId, hotelIds) {
     return await Booking.findOne({
-
       _id: bookingId,
-
       hotelId: {
-
         $in: hotelIds
-
       }
-
     });
-
   }
-  async completeOwnerBooking(
-    bookingId
-  ) {
 
+  async completeOwnerBooking(bookingId) {
     return await Booking.findByIdAndUpdate(
-
       bookingId,
-
       {
-
         $set: {
-
           status: BOOKING_STATUS.COMPLETED,
-
           completedAt: new Date()
-
         }
-
       },
-
       {
-
         returnDocument: "after"
-
       }
-
     )
-
-      .populate(
-        "userId",
-        "name email"
-      )
-
-      .populate(
-        "hotelId",
-        "name"
-      )
-
-      .populate(
-        "roomId",
-        "name roomType"
-      )
-
+      .populate("userId", "name email")
+      .populate("hotelId", "name")
+      .populate("roomId", "name roomType")
       .lean();
-
   }
 
   async expirePendingBookings() {
-
     return await Booking.updateMany(
-
       {
-
         status: BOOKING_STATUS.PENDING,
-
         expiresAt: {
-
           $lte: new Date()
-
         }
-
       },
-
       {
-
         $set: {
-
           status: BOOKING_STATUS.CANCELLED,
-
           cancelledAt: new Date()
-
         }
-
       }
-
     );
-
   }
 }
 

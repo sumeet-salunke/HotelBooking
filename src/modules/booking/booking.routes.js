@@ -7,7 +7,8 @@ import {
   cancelMyBooking,
   confirmBooking,
   cancelOwnerBooking,
-  completeOwnerBooking
+  completeOwnerBooking,
+  getOwnerBookings
 } from "./booking.controller.js";
 
 import {
@@ -58,6 +59,9 @@ router.post(
 
 
 
+
+//owner bookings
+router.get("/owner", authenticate, authorizeRoles(ROLES.HOTEL_OWNER), getOwnerBookings);
 
 //confirm
 router.patch("/owner/:bookingId/confirm", authenticate, authorizeRoles(ROLES.HOTEL_OWNER), confirmBooking);
